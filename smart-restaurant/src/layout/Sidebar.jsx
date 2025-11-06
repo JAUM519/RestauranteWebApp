@@ -34,6 +34,9 @@ export default function Sidebar({ open, onClose }) {
                 {!role && (
                     <ActiveNavLink className={styles.link} activeClass={styles.active} to="/login">Login</ActiveNavLink>
                 )}
+
+                {/* Siempre visible si hay sesión */}
+                <ActiveNavLink className={styles.link} activeClass={styles.active} to="/account">Mi cuenta</ActiveNavLink>
             </nav>
         </aside>
     )

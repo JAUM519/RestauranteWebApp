@@ -10,9 +10,9 @@ function useBreadcrumb() {
         '/client': ['Cliente', 'Inicio'],
         '/waiter': ['Mesero', 'Tablero'],
         '/cook': ['Cocinero', 'Cola'],
+        '/account': ['Cuenta'],
     }
-    const parts = map[pathname] || ['Inicio']
-    return parts
+    return map[pathname] || ['Inicio']
 }
 
 export default function Header({ onMenu }) {
