@@ -6,26 +6,23 @@ import Cook from '../pages/Cook.jsx'
 import NotFound from '../pages/NotFound.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 import RoleRoute from './RoleRoute.jsx'
+import SignupGoogle from '../pages/SignupGoogle.jsx'
 
 export default function AppRouter() {
     return (
         <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/sg" element={<SignupGoogle />} />
 
             {/* Usuarios autenticados */}
             <Route element={<ProtectedRoute />}>
-                {/* Cliente */}
                 <Route element={<RoleRoute allow="client" />}>
                     <Route path="/client" element={<Client />} />
                 </Route>
-
-                {/* Mesero */}
                 <Route element={<RoleRoute allow="waiter" />}>
                     <Route path="/waiter" element={<Waiter />} />
                 </Route>
-
-                {/* Cocinero */}
                 <Route element={<RoleRoute allow="cook" />}>
                     <Route path="/cook" element={<Cook />} />
                 </Route>

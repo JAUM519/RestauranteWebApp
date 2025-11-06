@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth, browserLocalPersistence, setPersistence } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
 
@@ -18,8 +18,6 @@ export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 export const rtdb = getDatabase(app)
+export const googleProvider = new GoogleAuthProvider()
 
-// Persistencia de sesión en el navegador
-setPersistence(auth, browserLocalPersistence).catch(() => {
-    // Ignorar errores de persistencia
-})
+googleProvider.setCustomParameters({ prompt: 'select_account' })
