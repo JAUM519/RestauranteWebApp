@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-// Reducers se agregarán progresivamente
+import authReducer from '../features/auth/authSlice.js'
+
 export const store = configureStore({
     reducer: {
-        // auth: authReducer, // se añadira en el siguiente commit
+        auth: authReducer,
     },
     middleware: (getDefault) => getDefault(),
     devTools: true,
