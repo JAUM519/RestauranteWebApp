@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { loginSucceeded } from '../features/auth/authSlice.js'
-import { signUpWithGoogleAndCreateUser } from '../features/auth/authService.js'
+import { signUpWithGoogleAndCreateUser } from '../features/auth/authThunks.js'
 
 export default function SignupGoogle() {
     const [role, setRole] = useState('client')

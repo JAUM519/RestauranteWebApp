@@ -1,0 +1,47 @@
+@import '../styles/variables';
+
+.sidebar {
+  position: relative;
+  border-right: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,0.02);
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Drawer móvil superpuesto */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: -280px;
+    width: 260px;
+    transition: left .18s ease;
+    z-index: 40;
+  }
+  .open { left: 0; }
+}
+
+.nav {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+
+.link {
+  color: $fg;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.link:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.link.active {
+  background: rgba(34,197,94,0.15);
+  border-color: rgba(34,197,94,0.35);
+}

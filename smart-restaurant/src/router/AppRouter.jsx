@@ -7,6 +7,11 @@ import NotFound from '../pages/NotFound.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 import RoleRoute from './RoleRoute.jsx'
 import SignupGoogle from '../pages/SignupGoogle.jsx'
+import AppShell from '../layout/AppShell.jsx'
+
+function Shell({ children }) {
+    return <AppShell>{children}</AppShell>
+}
 
 export default function AppRouter() {
     return (
@@ -15,16 +20,30 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/sg" element={<SignupGoogle />} />
 
-            {/* Usuarios autenticados */}
+            {/* Usuarios autenticados con layout */}
             <Route element={<ProtectedRoute />}>
+                {/* Cliente */}
                 <Route element={<RoleRoute allow="client" />}>
-                    <Route path="/client" element={<Client />} />
+                    <Route
+                        path="/client"
+                        element={<Shell><Client /></Shell>}
+                    />
                 </Route>
+
+                {/* Mesero */}
                 <Route element={<RoleRoute allow="waiter" />}>
-                    <Route path="/waiter" element={<Waiter />} />
+                    <Route
+                        path="/waiter"
+                        element={<Shell><Waiter /></Shell>}
+                    />
                 </Route>
+
+                {/* Cocinero */}
                 <Route element={<RoleRoute allow="cook" />}>
-                    <Route path="/cook" element={<Cook />} />
+                    <Route
+                        path="/cook"
+                        element={<Shell><Cook /></Shell>}
+                    />
                 </Route>
             </Route>
 

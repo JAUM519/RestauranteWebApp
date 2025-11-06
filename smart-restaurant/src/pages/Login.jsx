@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { loginSucceeded } from '../features/auth/authSlice.js'
-import { signInWithGoogleIfExisting, signInAsAnonymous, isGoogleAccountRegistered } from '../features/auth/authService.js'
+import { signInWithGoogleIfExisting, signInAsAnonymous, isGoogleAccountRegistered } from '../features/auth/authThunks.js'
 import Button from '../components/Button.jsx'
 
 function normalizeEmail(e) {

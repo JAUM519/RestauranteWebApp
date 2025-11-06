@@ -36,6 +36,10 @@ export async function isGoogleAccountRegistered(email) {
     return methods.includes('google.com')
 }
 
+export const signOutUser = () => async (dispatch) => {
+    await signOut(auth)
+    dispatch(logout())
+}
 /**
  * LOGIN GOOGLE DESDE /login
  * - Requiere email ingresado en UI.

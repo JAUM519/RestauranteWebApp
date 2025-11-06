@@ -1,5 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, selectDisplayName, selectRole } from '../features/auth/authSlice.js'
+import { selectDisplayName, selectRole } from '../features/auth/authSlice.js'
+import { signOutUser } from '../features/auth/authThunks.js'
+import grid from '../components/ResponsiveGrid.module.scss'
+import Card from '../components/Card.jsx'
 
 export default function Client() {
     const dispatch = useDispatch()
@@ -7,13 +10,31 @@ export default function Client() {
     const role = useSelector(selectRole)
 
     return (
-        <section style={{ padding: 24 }}>
-            <h2>Vista Cliente</h2>
+        <section className="container">
+            <h2 style={{ marginTop: 0 }}>Vista Cliente</h2>
             <p>Hola, {name ?? 'Usuario'} — rol: {role ?? 'N/A'}</p>
-            <button onClick={() => dispatch(logout())}>Salir</button>
-            <p style={{ marginTop: 16 }}>
-                Menú, carrito, personalización y estado en vivo se implementarán después.
-            </p>
+
+            <div className={grid.grid}>
+                <div className={grid['span-8']}>
+                    <Card title="Menú">
+                        <p id="menu">Listado de categorías y platos (árbol).</p>
+                    </Card>
+                </div>
+                <div className={grid['span-4']}>
+                    <Card title="Carrito">
+                        <p id="cart">Resumen y total en tiempo real.</p>
+                    </Card>
+                </div>
+                <div className={grid['span-12']}>
+                    <Card title="Estado del pedido">
+                        <p id="orders">Timeline en tiempo real (RTDB).</p>
+                    </Card>
+                </div>
+            </div>
+
+            <div style={{ marginTop: 16 }}>
+                <button onClick={() => dispatch(signOutUser())}>Salir</button>
+            </div>
         </section>
     )
 }
