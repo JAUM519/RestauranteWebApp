@@ -5,7 +5,7 @@ import AppRouter from './router/AppRouter.jsx'
 import { AppProvider } from './context/AppContext.jsx'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
-import './index.css'
+import './index.scss'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

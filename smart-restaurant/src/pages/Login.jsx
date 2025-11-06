@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { loginSucceeded } from '../features/auth/authSlice.js'
 import { signInWithGoogleIfExisting, signInAsAnonymous, isGoogleAccountRegistered } from '../features/auth/authService.js'
+import Button from '../components/Button.jsx'
 
 function normalizeEmail(e) {
     return (e || '').trim().toLowerCase()
@@ -93,8 +94,8 @@ export default function Login() {
             </div>
 
             <div style={{ display: 'grid', gap: 8, marginTop: 16 }}>
-                <button onClick={handleGoogle}>Entrar con Google (para meseros y cocineros)</button>
-                <button onClick={handleAnonymous}>Entrar como Cliente</button>
+                <Button onClick={handleGoogle}>Entrar con Google (para meseros y cocineros)</Button>
+                <Button onClick={handleAnonymous}>Entrar como Cliente</Button>
             </div>
 
             {error && <p style={{ marginTop: 12, color: '#f87171' }}>{error}</p>}
