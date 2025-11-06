@@ -4,12 +4,16 @@ import { useNavigate, Link } from 'react-router-dom'
 import { loginSucceeded } from '../features/auth/authSlice.js'
 import { signInWithGoogleIfExisting, signInAsAnonymous, isGoogleAccountRegistered } from '../features/auth/authThunks.js'
 import Button from '../components/Button.jsx'
+import { useAuthGuard } from '../hooks/useAuthGuard.js'
 
 function normalizeEmail(e) {
     return (e || '').trim().toLowerCase()
 }
 
 export default function Login() {
+    // Si ya estás autenticado, salir de /login al home del rol
+    useAuthGuard({ redirectIfAuth: true })
+
     const [email, setEmail] = useState('')
     const [checking, setChecking] = useState(false)
     const [infoMsg, setInfoMsg] = useState(null)
@@ -99,6 +103,7 @@ export default function Login() {
             </div>
 
             {error && <p style={{ marginTop: 12, color: '#f87171' }}>{error}</p>}
+
         </section>
     )
 }

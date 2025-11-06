@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore'
 import { auth, db, googleProvider } from '../../firebase/config'
 import { assignTableNumber } from './table'
+import { logout } from './authSlice'
 
 // ---------- helpers ----------
 function normalizeEmail(email) {
@@ -40,6 +41,7 @@ export const signOutUser = () => async (dispatch) => {
     await signOut(auth)
     dispatch(logout())
 }
+
 /**
  * LOGIN GOOGLE DESDE /login
  * - Requiere email ingresado en UI.
@@ -87,7 +89,7 @@ export async function signInWithGoogleIfExisting(prevalidatedEmail) {
     }
 }
 
-// ---------- login anónimo (sin cambios) ----------
+// ---------- login anónimo ----------
 export async function signInAsAnonymous() {
     const cred = await signInAnonymously(auth)
     const { user } = cred
@@ -113,7 +115,7 @@ export async function signInAsAnonymous() {
     }
 }
 
-// ---------- alta por Google (para /signup-google) sin cambios ----------
+// ---------- alta por Google (para /sg) ----------
 export async function signUpWithGoogleAndCreateUser({ role = 'client', table = null }) {
     const cred = await signInWithPopup(auth, googleProvider)
     const { user } = cred
