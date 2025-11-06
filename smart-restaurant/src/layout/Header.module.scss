@@ -22,10 +22,16 @@
   cursor: pointer;
 }
 
+.menuBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.5);
+}
+
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .logo {
@@ -35,6 +41,18 @@
 .title {
   font-weight: 700;
   letter-spacing: .2px;
+}
+
+.breadcrumbs {
+  margin-left: 8px;
+  color: $muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crumb {
+  font-size: 13px;
 }
 
 .user {

@@ -34,6 +34,8 @@
   border-radius: 10px;
   border: 1px solid transparent;
   background: transparent;
+  outline: none;
+  display: inline-block;
 }
 
 .link:hover {
@@ -41,7 +43,11 @@
   border-color: rgba(255,255,255,0.08);
 }
 
-.link.active {
+.active {
   background: rgba(34,197,94,0.15);
   border-color: rgba(34,197,94,0.35);
+}
+
+.link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.5);
 }

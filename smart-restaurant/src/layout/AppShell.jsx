@@ -11,10 +11,11 @@ export default function AppShell({ children }) {
 
     return (
         <div className={styles.shell}>
+            <a href="#main" className={styles.skipLink}>Saltar al contenido</a>
             <Header onMenu={handleToggle} />
             <div className={styles.body}>
                 <Sidebar open={open} onClose={handleClose} />
-                <main className={styles.main} onClick={open ? handleClose : undefined}>
+                <main id="main" className={styles.main} onClick={open ? handleClose : undefined}>
                     {children}
                 </main>
             </div>
