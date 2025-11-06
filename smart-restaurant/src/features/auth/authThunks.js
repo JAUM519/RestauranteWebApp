@@ -4,13 +4,14 @@ import {
     fetchSignInMethodsForEmail,
     signOut,
     getAdditionalUserInfo,
+    onAuthStateChanged,
 } from 'firebase/auth'
 import {
     doc, getDoc, setDoc, serverTimestamp,
 } from 'firebase/firestore'
 import { auth, db, googleProvider } from '../../firebase/config'
 import { assignTableNumber } from './table'
-import { logout } from './authSlice'
+import { loginSucceeded, logout } from './authSlice' // asegúrate de que exista
 
 // ---------- helpers ----------
 function normalizeEmail(email) {
@@ -37,28 +38,21 @@ export async function isGoogleAccountRegistered(email) {
     return methods.includes('google.com')
 }
 
+// ---------- sign out ----------
 export const signOutUser = () => async (dispatch) => {
     await signOut(auth)
     dispatch(logout())
 }
 
-/**
- * LOGIN GOOGLE DESDE /login
- * - Requiere email ingresado en UI.
- * - Permite popup, pero si la cuenta es NUEVA, se cierra sesión y se rechaza.
- * - Si el email del popup no coincide con el validado, se cierra sesión y se rechaza.
- * - Si no existe users/{uid}, se cierra sesión y se rechaza.
- */
+// ---------- login con Google solo para cuentas existentes ----------
 export async function signInWithGoogleIfExisting(prevalidatedEmail) {
     const expected = normalizeEmail(prevalidatedEmail)
     if (!expected) return { ok: false, reason: 'email-required' }
 
-    // Popup
     const cred = await signInWithPopup(auth, googleProvider)
     const { user } = cred
     const info = getAdditionalUserInfo(cred)
 
-    // Si es una CUENTA NUEVA, no permitimos login aquí
     if (info?.isNewUser) {
         await signOut(auth)
         return { ok: false, reason: 'new-user-not-allowed' }
@@ -89,7 +83,7 @@ export async function signInWithGoogleIfExisting(prevalidatedEmail) {
     }
 }
 
-// ---------- login anónimo ----------
+// ---------- login anónimo (cliente) ----------
 export async function signInAsAnonymous() {
     const cred = await signInAnonymously(auth)
     const { user } = cred
@@ -115,7 +109,7 @@ export async function signInAsAnonymous() {
     }
 }
 
-// ---------- alta por Google (para /sg) ----------
+// ---------- alta por Google (pantalla /sg) ----------
 export async function signUpWithGoogleAndCreateUser({ role = 'client', table = null }) {
     const cred = await signInWithPopup(auth, googleProvider)
     const { user } = cred
@@ -149,4 +143,41 @@ export async function signUpWithGoogleAndCreateUser({ role = 'client', table = n
             email: saved.email ?? null,
         },
     }
+}
+
+// ---------- listener de sesión: hidrata Redux al arrancar ----------
+let _listenerStarted = false
+export const startAuthListener = () => (dispatch) => {
+    if (_listenerStarted) return
+    _listenerStarted = true
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            dispatch(logout())
+            return
+        }
+
+        // Intentar leer doc de usuario para rol y demás metadatos
+        try {
+            const docData = await readUserDoc(user.uid)
+            dispatch(loginSucceeded({
+                uid: user.uid,
+                displayName: docData?.displayName || user.displayName || 'Usuario',
+                role: docData?.role || null,
+                table: docData?.table ?? null,
+                provider: docData?.provider || (user.isAnonymous ? 'anonymous' : 'google'),
+                email: docData?.email ?? user.email ?? null,
+            }))
+        } catch {
+            // Si falla Firestore, hidratar con lo mínimo de Firebase Auth
+            dispatch(loginSucceeded({
+                uid: user.uid,
+                displayName: user.displayName || 'Usuario',
+                role: null,
+                table: null,
+                provider: user.isAnonymous ? 'anonymous' : 'google',
+                email: user.email ?? null,
+            }))
+        }
+    })
 }

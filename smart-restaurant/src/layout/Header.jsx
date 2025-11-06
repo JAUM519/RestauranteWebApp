@@ -2,6 +2,7 @@ import styles from './Header.module.scss'
 import { useSelector } from 'react-redux'
 import { selectDisplayName, selectRole } from '../features/auth/authSlice.js'
 import { useLocation } from 'react-router-dom'
+import { useLive } from '../context/LiveContext.jsx'
 
 function useBreadcrumb() {
     const { pathname } = useLocation()
@@ -19,6 +20,7 @@ export default function Header({ onMenu }) {
     const name = useSelector(selectDisplayName)
     const role = useSelector(selectRole)
     const crumbs = useBreadcrumb()
+    const { connected } = useLive()
 
     return (
         <header className={styles.header}>
@@ -35,6 +37,13 @@ export default function Header({ onMenu }) {
             </span>
                     ))}
                 </nav>
+            </div>
+            <div className={styles.user}>
+        <span
+            className={connected ? styles.dotOn : styles.dotOff}
+            title={connected ? 'Conectado a RTDB' : 'Sin conexión a RTDB'}
+            aria-label={connected ? 'Conectado' : 'Desconectado'}
+        />
             </div>
         </header>
     )

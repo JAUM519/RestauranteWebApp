@@ -78,3 +78,14 @@
 @media (min-width: 901px) {
   .menuBtn { display: none; }
 }
+
+.dotOn, .dotOff {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 6px;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.dotOn { background: #22c55e; }
+.dotOff { background: #ef4444; }
