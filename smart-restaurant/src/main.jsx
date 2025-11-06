@@ -3,14 +3,18 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './router/AppRouter.jsx'
 import { AppProvider } from './context/AppContext.jsx'
+import { Provider } from 'react-redux'
+import { store } from './store/store.js'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <AppProvider>
-            <BrowserRouter>
-                <AppRouter />
-            </BrowserRouter>
-        </AppProvider>
+        <Provider store={store}>
+            <AppProvider>
+                <BrowserRouter>
+                    <AppRouter />
+                </BrowserRouter>
+            </AppProvider>
+        </Provider>
     </React.StrictMode>,
 )
