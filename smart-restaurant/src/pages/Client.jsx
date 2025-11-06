@@ -1,27 +1,18 @@
-import { useAppContext } from '../context/AppContext.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout, selectDisplayName, selectRole } from '../features/auth/authSlice.js'
 
 export default function Client() {
-    const { user, setUser, theme, setTheme } = useAppContext()
-
-    const fakeLogin = () => {
-        setUser({ uid: 'demo-uid', displayName: 'Cliente Demo', role: 'client' })
-    }
-
-    const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
+    const dispatch = useDispatch()
+    const name = useSelector(selectDisplayName)
+    const role = useSelector(selectRole)
 
     return (
         <section style={{ padding: 24 }}>
             <h2>Vista Cliente</h2>
-            <p>Tema actual: <strong>{theme}</strong></p>
-            <p>Usuario: <strong>{user ? `${user.displayName} (${user.role})` : 'no autenticado'}</strong></p>
-
-            <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-                <button onClick={fakeLogin}>Simular login cliente</button>
-                <button onClick={toggleTheme}>Cambiar tema</button>
-            </div>
-
+            <p>Hola, {name ?? 'Usuario'} — rol: {role ?? 'N/A'}</p>
+            <button onClick={() => dispatch(logout())}>Salir</button>
             <p style={{ marginTop: 16 }}>
-                Menú, carrito, personalización y estado en vivo se implementarán en commits posteriores.
+                Menú, carrito, personalización y estado en vivo se implementarán después.
             </p>
         </section>
     )
