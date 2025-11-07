@@ -1,5 +1,13 @@
 import { rtdb } from '../firebase/config'
-import { ref, onValue, set, update, push, serverTimestamp, off } from 'firebase/database'
+import {
+    ref,
+    onValue,
+    set,
+    update,
+    push,
+    serverTimestamp as _serverTimestamp,
+    off,
+} from 'firebase/database'
 
 export function r(path) {
     return ref(rtdb, path)
@@ -22,6 +30,9 @@ export async function patch(path, data) {
 export async function append(path, data) {
     const node = r(path)
     const child = push(node)
-    await set(child, { ...data, _ts: serverTimestamp() })
+    await set(child, { ...data, _ts: _serverTimestamp() })
     return child.key
 }
+
+// Exponer serverTimestamp para componer objetos con marca de tiempo
+export const serverTimestamp = _serverTimestamp
