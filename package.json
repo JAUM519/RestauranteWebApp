@@ -1,0 +1,11 @@
+{
+  "name": "restaurantewebapp-root",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm --prefix ./smart-restaurant run dev",
+    "build": "npm --prefix ./smart-restaurant run build",
+    "preview": "npm --prefix ./smart-restaurant run preview",
+    "install:app": "npm --prefix ./smart-restaurant install"
+  }
+}
