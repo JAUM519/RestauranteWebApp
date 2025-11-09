@@ -1,9 +1,14 @@
-import { useSelector } from 'react-redux'
-import { Navigate, Outlet } from 'react-router-dom'
-import { selectIsAuthenticated } from '../features/auth/authSlice.js'
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 
+/**
+ * Protege rutas que requieren autenticación.
+ * Si no hay usuario autenticado, redirige al login.
+ */
 export default function ProtectedRoute() {
-    const isAuth = useSelector(selectIsAuthenticated)
-    if (!isAuth) return <Navigate to="/login" replace />
-    return <Outlet />
+  const { user } = useSelector((state) => state.auth);
+
+  if (!user) return <Navigate to="/login" replace />;
+
+  return <Outlet />;
 }

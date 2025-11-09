@@ -1,18 +1,26 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { selectIsAuthenticated, selectRole } from '../features/auth/authSlice.js'
-import { roleToPath } from './paths.js'
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
+/**
+ * Redirige automáticamente al área del usuario según su rol.
+ * - Cliente -> /client
+ * - Mesero -> /waiter
+ * - Cocinero -> /cook
+ * Si no está autenticado, lo envía al login.
+ */
 export default function RoleRedirector() {
-    const isAuth = useSelector(selectIsAuthenticated)
-    const role = useSelector(selectRole)
-    const navigate = useNavigate()
+  const { user } = useSelector((state) => state.auth);
 
-    useEffect(() => {
-        if (isAuth) navigate(roleToPath(role), { replace: true })
-        else navigate('/login', { replace: true })
-    }, [isAuth, role, navigate])
+  if (!user) return <Navigate to="/login" replace />;
 
-    return null
+  switch (user.role) {
+    case "client":
+      return <Navigate to="/client" replace />;
+    case "waiter":
+      return <Navigate to="/waiter" replace />;
+    case "cook":
+      return <Navigate to="/cook" replace />;
+    default:
+      return <Navigate to="/login" replace />;
+  }
 }
