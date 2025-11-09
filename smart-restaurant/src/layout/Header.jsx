@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectDisplayName, selectRole } from '../features/auth/authSlice.js'
 import { useLocation } from 'react-router-dom'
 import { useLive } from '../context/LiveContext.jsx'
+import sombreroAzul from '../assets/Logos/sombrero_azul.png'
 
 function useBreadcrumb() {
     const { pathname } = useLocation()
@@ -28,7 +29,7 @@ export default function Header({ onMenu }) {
                 ☰
             </button>
             <div className={styles.brand}>
-                <a className={styles.logo} href="/" aria-label="Inicio">🍽</a>
+                <a className={styles.logo} href="/" aria-label="Inicio"><img src={sombreroAzul} alt="Smart Restaurant" className={styles.logoImg} /></a>
                 <span className={styles.title}>Smart Restaurant</span>
                 <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
                     {crumbs.map((c, i) => (

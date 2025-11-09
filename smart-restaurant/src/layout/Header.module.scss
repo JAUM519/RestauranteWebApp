@@ -1,4 +1,4 @@
-@import '../styles/variables';
+@use '../styles/variables' as *;
 
 .header {
   height: 56px;
@@ -34,8 +34,11 @@
   min-width: 0;
 }
 
-.logo {
-  font-size: 18px;
+.logo { display: inline-flex; align-items: center; }
+.logoImg { width: 32px; height: 32px; object-fit: contain; display: block; }
+
+@media (min-width: 1200px) {
+  .logoImg { width: 36px; height: 36px; }
 }
 
 .title {
