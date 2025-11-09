@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectUid, selectDisplayName, selectRole } from '../features/auth/authSlice'
+import { selectUid, selectDisplayName, selectRole } from '../features/auth/authSlice.js'
 import { updateDisplayName } from '../features/auth/profileThunks'
 import Button from '../components/Button.jsx'
 import { signOutUser } from '../features/auth/authThunks'
+import { selectTotal } from '../features/cart/cartSlice.js'
 
 export default function Account() {
     const dispatch = useDispatch()
@@ -91,9 +92,21 @@ export default function Account() {
                             <li>El rol lo define un administrador o RR.HH.</li>
                             <li>Los cambios quedan guardados en la base de datos.</li>
                         </ul>
+                        <hr />
+                        <AccountTotal />
                     </div>
                 </div>
             </div>
         </section>
     )
+}
+
+function AccountTotal() {
+  const total = useSelector(selectTotal)
+  return (
+    <div>
+      <h4 style={{ marginTop: 0 }}>Cuenta total</h4>
+      <p>Tu total actual en carrito es: <strong>${total.toFixed(2)}</strong></p>
+    </div>
+  )
 }
