@@ -12,6 +12,10 @@ export function loadAuth() {
 export function saveAuth(state) {
     try {
         localStorage.setItem(KEY, JSON.stringify(state))
+        // Persistir mesa en SessionStorage para la vista cliente
+        if (state?.table != null) {
+            try { sessionStorage.setItem('sr_table', String(state.table)) } catch {}
+        }
     } catch {
         // ignorar errores de cuota
     }
