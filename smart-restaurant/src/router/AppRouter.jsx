@@ -27,19 +27,19 @@ export default function AppRouter() {
                 {/* Cuenta, válido para cualquier rol */}
                 <Route path="/account" element={<Shell><Account /></Shell>} />
 
-                {/* Cliente */}
+                {/* Cliente (vista expandida sin AppShell) */}
                 <Route element={<RoleRoute allow="client" />}>
-                    <Route path="/client" element={<Shell><Client /></Shell>} />
+                    <Route path="/client" element={<Client />} />
                 </Route>
 
-                {/* Mesero */}
+                {/* Mesero (vista expandida sin AppShell) */}
                 <Route element={<RoleRoute allow="waiter" />}>
-                    <Route path="/waiter" element={<Shell><Waiter /></Shell>} />
+                    <Route path="/waiter" element={<Waiter />} />
                 </Route>
 
-                {/* Cocinero */}
+                {/* Cocinero (vista expandida sin AppShell) */}
                 <Route element={<RoleRoute allow="cook" />}>
-                    <Route path="/cook" element={<Shell><Cook /></Shell>} />
+                    <Route path="/cook" element={<Cook />} />
                 </Route>
             </Route>
 

@@ -15,9 +15,17 @@ import AppRouter from './router/AppRouter.jsx'
 // Contextos de la app
 import { AppProvider } from './context/AppContext.jsx'
 import { LiveProvider } from './context/LiveContext.jsx'
+import { HistoryProvider } from './context/HistoryContext.jsx'
 
 // Estilos globales (SASS)
 import './index.scss'
+
+// Registrar helper de seeding en desarrollo (sin top-level await)
+if (import.meta.env?.DEV) {
+  import('./data/seedFirestoreMenu.js')
+    .then((mod) => mod.attachSeedHelper?.())
+    .catch(() => {})
+}
 
 function Bootstrap() {
     const dispatch = useDispatch()
@@ -28,9 +36,11 @@ function Bootstrap() {
     return (
         <LiveProvider>
             <AppProvider>
+              <HistoryProvider>
                 <BrowserRouter>
                     <AppRouter />
                 </BrowserRouter>
+              </HistoryProvider>
             </AppProvider>
         </LiveProvider>
     )
