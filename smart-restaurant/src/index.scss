@@ -1,0 +1,22 @@
+@import './styles/globals';
+
+:root {
+    --bg: #0b0c10;
+    --fg: #e5e7eb;
+    --ac: #22c55e;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+a { color: var(--ac); text-decoration: none; }

@@ -1,0 +1,37 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: $bg;
+  color: $fg;
+  font-family: $font-stack;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: $accent; text-decoration: none; }
+button {
+  @include button;
+  background: $accent;
+  color: #0b0c10;
+}
+button[disabled] { opacity: .6; cursor: not-allowed; }
+input, select {
+  background: rgba(255,255,255,0.06);
+  color: $fg;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.container { @include container; }
+.card { @include card; }
+.text-muted { color: $muted; }
+.text-danger { color: $danger; }
