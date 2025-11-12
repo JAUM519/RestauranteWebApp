@@ -25,7 +25,7 @@ const Cliente = () => {
 
   const total = carrito.reduce((acc, item) => acc + item.precio, 0);
 
-  // ✅ Confirmar pedido y registrar pago
+  // Confirmar pedido y registrar pago
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
       alert("No hay productos en el carrito ");
@@ -62,14 +62,25 @@ const Cliente = () => {
     }
   };
 
-  // ✅ Escuchar mensajes del pedido activo
+  //  Escuchar mensajes del pedido activo
   useEffect(() => {
     if (!lastOrderId) return;
     const stop = listenMessages(lastOrderId, setMsgList);
     return () => stop && stop();
   }, [lastOrderId]);
 
-  // ✅ Enviar mensaje del cliente
+  // Escuchar cambios en el estado del pedido
+useEffect(() => {
+  if (!lastOrderId) return;
+  const stop = suscribirCambiosPedido(lastOrderId, (pedido) => {
+    if (pedido?.estado) {
+      alert(` Estado actualizado: ${pedido.estado}`);
+    }
+  });
+  return () => stop && stop();
+    }, [lastOrderId]);
+
+  //  Enviar mensaje del cliente
   const sendClientMsg = async () => {
     if (!lastOrderId || !text.trim()) return;
     await sendMessage(lastOrderId, "cliente", text.trim());

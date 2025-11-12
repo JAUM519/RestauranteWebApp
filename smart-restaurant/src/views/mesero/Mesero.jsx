@@ -23,6 +23,14 @@ const Mesero = () => {
     return () => stop && stop();
   }, [activeOrder]);
 
+  useEffect(() => {
+  Object.keys(pedidos).forEach((id) => {
+    suscribirCambiosPedido(id, (pedido) => {
+      console.log(`📦 Pedido ${id.slice(0,6)} → Estado: ${pedido.estado}`);
+    });
+  });
+  }, [pedidos]);
+
   // Enviar mensaje
   const handleSend = async () => {
     if (!activeOrder || !newMsg.trim()) return;
