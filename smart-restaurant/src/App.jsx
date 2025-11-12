@@ -6,6 +6,7 @@ import './App.css'
 
 import Mesero from './views/mesero/Mesero'
 import Cocinero from './views/cocinero/Cocinero'
+import Cliente from "./views/cliente/Cliente";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,6 +16,7 @@ function App() {
       <h1>Smart Restaurant</h1>
 
       <Routes>
+        <Route path="/cliente" element={<Cliente />} />
         <Route path="/mesero" element={<Mesero />} />
         <Route path="/cocinero" element={<Cocinero />} />
       </Routes>
