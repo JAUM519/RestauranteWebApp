@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-// Estado global
+// Estado global (Redux)
 import { Provider, useDispatch } from 'react-redux'
 import { store } from './store/store.js'
 
@@ -16,6 +16,7 @@ import AppRouter from './router/AppRouter.jsx'
 import { AppProvider } from './context/AppContext.jsx'
 import { LiveProvider } from './context/LiveContext.jsx'
 import { HistoryProvider } from './context/HistoryContext.jsx'
+import { PedidoProvider } from './context/PedidoContext.jsx'
 
 // Estilos globales (SASS)
 import './index.scss'
@@ -28,28 +29,31 @@ if (import.meta.env?.DEV) {
 }
 
 function Bootstrap() {
-    const dispatch = useDispatch()
-    React.useEffect(() => {
-        dispatch(startAuthListener())
-    }, [dispatch])
+  const dispatch = useDispatch()
 
-    return (
-        <LiveProvider>
-            <AppProvider>
-              <HistoryProvider>
-                <BrowserRouter>
-                    <AppRouter />
-                </BrowserRouter>
-              </HistoryProvider>
-            </AppProvider>
-        </LiveProvider>
-    )
+  React.useEffect(() => {
+    dispatch(startAuthListener())
+  }, [dispatch])
+
+  return (
+    <LiveProvider>
+      <AppProvider>
+        <HistoryProvider>
+          <PedidoProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </PedidoProvider>
+        </HistoryProvider>
+      </AppProvider>
+    </LiveProvider>
+  )
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <Bootstrap />
-        </Provider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <Bootstrap />
+    </Provider>
+  </React.StrictMode>
 )

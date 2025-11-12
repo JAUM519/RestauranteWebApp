@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { PedidoContext } from "../../context/PedidoContext";
 
 const menuInicial = [
   { id: 1, nombre: "Hamburguesa", precio: 18000 },
@@ -9,14 +10,11 @@ const menuInicial = [
 const Cliente = () => {
   const [menu] = useState(menuInicial);
   const [carrito, setCarrito] = useState([]);
+  const { estadoPedido } = useContext(PedidoContext);
 
-  const agregarAlCarrito = (item) => {
-    setCarrito([...carrito, item]);
-  };
-
-  const eliminarDelCarrito = (id) => {
+  const agregarAlCarrito = (item) => setCarrito([...carrito, item]);
+  const eliminarDelCarrito = (id) =>
     setCarrito(carrito.filter((producto) => producto.id !== id));
-  };
 
   const total = carrito.reduce((acc, item) => acc + item.precio, 0);
 
@@ -43,6 +41,7 @@ const Cliente = () => {
       </ul>
 
       <h4>Total: ${total}</h4>
+      <h4>Estado del pedido: {estadoPedido}</h4>
     </div>
   );
 };
