@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { PedidoContext } from "../../context/PedidoContext";
 import { crearPedido } from "../../hooks/usePedidos";
 import { crearPago } from "../../hooks/usePayments";
-import { listenMessages, sendMessage } from "../../hooks/useMessages"; // ✅ nuevo import
-
+import { listenMessages, sendMessage } from "../../hooks/useMessages";
 const menuInicial = [
   { id: 1, nombre: "Hamburguesa", precio: 18000 },
   { id: 2, nombre: "Pizza", precio: 25000 },
@@ -29,7 +28,7 @@ const Cliente = () => {
   // ✅ Confirmar pedido y registrar pago
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
-      alert("No hay productos en el carrito 😅");
+      alert("No hay productos en el carrito ");
       return;
     }
 
@@ -44,7 +43,7 @@ const Cliente = () => {
     try {
       const { id } = await crearPedido(pedido);
       setLastOrderId(id);
-      alert(`✅ Pedido enviado (ID: ${id})`);
+      alert(` Pedido enviado (ID: ${id})`);
 
       if (metodoPago === "Tarjeta") {
         const pago = {
@@ -53,12 +52,12 @@ const Cliente = () => {
           ts: Date.now(),
         };
         await crearPago(id, pago);
-        alert("💳 Pago con tarjeta registrado (simulado)");
+        alert(" Pago con tarjeta registrado (simulado)");
       }
 
       setCarrito([]); // Limpia el carrito después del envío
     } catch (error) {
-      console.error("❌ Error al crear pedido:", error);
+      console.error(" Error al crear pedido:", error);
       alert("Hubo un problema al enviar tu pedido.");
     }
   };
@@ -134,7 +133,7 @@ const Cliente = () => {
       {/* Chat del cliente */}
       {lastOrderId && (
         <div style={{ marginTop: 30 }}>
-          <h3>💬 Chat con el restaurante (Pedido #{lastOrderId.slice(0, 6)})</h3>
+          <h3> Chat con el restaurante (Pedido #{lastOrderId.slice(0, 6)})</h3>
           <div
             style={{
               border: "1px solid #ccc",
