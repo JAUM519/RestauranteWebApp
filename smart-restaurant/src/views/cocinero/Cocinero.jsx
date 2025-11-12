@@ -1,20 +1,28 @@
-import React, { useContext } from "react";
-import { PedidoContext } from "../../context/PedidoContext";
+import React, { useEffect, useState } from "react";
+import { escucharPedidos } from "../../hooks/usePedidos";
 
 const Cocinero = () => {
-  const { estadoPedido, setEstadoPedido } = useContext(PedidoContext);
+  const [pedidos, setPedidos] = useState({});
+
+  useEffect(() => {
+    escucharPedidos(setPedidos);
+  }, []);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Vista del Cocinero</h1>
-      <p>Pedidos activos para preparar aparecerán aquí.</p>
-
-      <h3>Estado actual del pedido: {estadoPedido}</h3>
-
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={() => setEstadoPedido("Preparando")}>Preparando</button>
-        <button onClick={() => setEstadoPedido("Listo")}>Listo</button>
-      </div>
+      <h1>Pedidos en Cocina</h1>
+      {Object.keys(pedidos).length === 0 ? (
+        <p>No hay pedidos en curso</p>
+      ) : (
+        <ul>
+          {Object.entries(pedidos).map(([id, pedido]) => (
+            <li key={id}>
+              <strong>Platos:</strong> {pedido.items?.length || 0} | 
+              <strong>Estado:</strong> {pedido.estado}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
