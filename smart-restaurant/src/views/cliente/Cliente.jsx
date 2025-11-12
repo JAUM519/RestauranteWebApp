@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { PedidoContext } from "../../context/PedidoContext";
 import { crearPedido } from "../../hooks/usePedidos";
-import { crearPago } from "../../hooks/usePayments"; // ✅ nuevo import
+import { crearPago } from "../../hooks/usePayments";
+import { listenMessages, sendMessage } from "../../hooks/useMessages"; // ✅ nuevo import
 
 const menuInicial = [
   { id: 1, nombre: "Hamburguesa", precio: 18000 },
@@ -15,13 +16,17 @@ const Cliente = () => {
   const [metodoPago, setMetodoPago] = useState("Efectivo");
   const { estadoPedido } = useContext(PedidoContext);
 
+  const [lastOrderId, setLastOrderId] = useState(null);
+  const [msgList, setMsgList] = useState([]);
+  const [text, setText] = useState("");
+
   const agregarAlCarrito = (item) => setCarrito([...carrito, item]);
   const eliminarDelCarrito = (id) =>
     setCarrito(carrito.filter((producto) => producto.id !== id));
 
   const total = carrito.reduce((acc, item) => acc + item.precio, 0);
 
-  // ✅ Nueva función para confirmar pedido y registrar pago
+  // ✅ Confirmar pedido y registrar pago
   const confirmarPedido = async () => {
     if (carrito.length === 0) {
       alert("No hay productos en el carrito 😅");
@@ -37,11 +42,10 @@ const Cliente = () => {
     };
 
     try {
-      // Crear pedido en Firebase y obtener ID
       const { id } = await crearPedido(pedido);
+      setLastOrderId(id);
       alert(`✅ Pedido enviado (ID: ${id})`);
 
-      // Si es pago con tarjeta, registrar un pago simulado
       if (metodoPago === "Tarjeta") {
         const pago = {
           metodo: "Tarjeta",
@@ -57,6 +61,20 @@ const Cliente = () => {
       console.error("❌ Error al crear pedido:", error);
       alert("Hubo un problema al enviar tu pedido.");
     }
+  };
+
+  // ✅ Escuchar mensajes del pedido activo
+  useEffect(() => {
+    if (!lastOrderId) return;
+    const stop = listenMessages(lastOrderId, setMsgList);
+    return () => stop && stop();
+  }, [lastOrderId]);
+
+  // ✅ Enviar mensaje del cliente
+  const sendClientMsg = async () => {
+    if (!lastOrderId || !text.trim()) return;
+    await sendMessage(lastOrderId, "cliente", text.trim());
+    setText("");
   };
 
   return (
@@ -112,6 +130,64 @@ const Cliente = () => {
       >
         Confirmar pedido
       </button>
+
+      {/* Chat del cliente */}
+      {lastOrderId && (
+        <div style={{ marginTop: 30 }}>
+          <h3>💬 Chat con el restaurante (Pedido #{lastOrderId.slice(0, 6)})</h3>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: 5,
+              padding: 10,
+              height: 200,
+              overflowY: "auto",
+              backgroundColor: "#fafafa",
+            }}
+          >
+            {msgList.length === 0 ? (
+              <p style={{ color: "#888" }}>Aún no hay mensajes.</p>
+            ) : (
+              msgList.map((m, idx) => (
+                <div key={idx}>
+                  <small>
+                    <strong>{m.from}:</strong>
+                  </small>{" "}
+                  {m.text}
+                </div>
+              ))
+            )}
+          </div>
+
+          <div style={{ marginTop: 10 }}>
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Escribe un mensaje..."
+              style={{
+                width: "70%",
+                padding: 8,
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
+            />
+            <button
+              onClick={sendClientMsg}
+              style={{
+                marginLeft: 8,
+                padding: "8px 16px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: 4,
+                cursor: "pointer",
+              }}
+            >
+              Enviar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
