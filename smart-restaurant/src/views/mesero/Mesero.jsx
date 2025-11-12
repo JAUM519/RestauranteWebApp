@@ -16,14 +16,14 @@ const Mesero = () => {
     };
   }, []);
 
-  // Escucha mensajes en tiempo real del pedido activo
+  // Escucha mensajes del pedido activo
   useEffect(() => {
     if (!activeOrder) return;
     const stop = listenMessages(activeOrder, setMessages);
     return () => stop && stop();
   }, [activeOrder]);
 
-  // Enviar mensaje nuevo
+  // Enviar mensaje
   const handleSend = async () => {
     if (!activeOrder || !newMsg.trim()) return;
     await sendMessage(activeOrder, "mesero", newMsg.trim());
@@ -31,39 +31,28 @@ const Mesero = () => {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Mesero — Pedidos</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>Pedidos en tiempo real</h1>
 
       {Object.keys(pedidos).length === 0 ? (
         <p>No hay pedidos activos aún</p>
       ) : (
-        <div style={{ display: "flex", gap: 20 }}>
+        <div style={{ display: "flex", gap: "20px" }}>
           {/* Lista de pedidos */}
           <div style={{ flex: 1 }}>
             <h3>Lista de pedidos</h3>
             <ul>
-              {Object.entries(pedidos).map(([id, p]) => (
-                <li key={id} style={{ marginBottom: 8 }}>
-                  <button
-                    onClick={() => setActiveOrder(id)}
-                    style={{
-                      backgroundColor:
-                        id === activeOrder ? "#007bff" : "#f0f0f0",
-                      color: id === activeOrder ? "white" : "black",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                    }}
-                  >
-                    #{id.slice(0, 6)} — ${p.total} — {p.estado}
+              {Object.entries(pedidos).map(([id, pedido]) => (
+                <li key={id} style={{ marginBottom: "10px" }}>
+                  <button onClick={() => setActiveOrder(id)}>
+                    #{id.slice(0, 6)} — ${pedido.total} — {pedido.estado}
                   </button>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Chat por pedido */}
+          {/* Chat del pedido */}
           <div style={{ flex: 1 }}>
             <h3>
               Chat (Pedido {activeOrder ? activeOrder.slice(0, 6) : "—"})
@@ -72,8 +61,8 @@ const Mesero = () => {
             <div
               style={{
                 minHeight: 200,
-                border: "1px solid #ddd",
-                padding: 8,
+                border: "1px solid #ccc",
+                padding: 10,
                 overflowY: "auto",
                 backgroundColor: "#fafafa",
               }}
@@ -92,7 +81,7 @@ const Mesero = () => {
               )}
             </div>
 
-            <div style={{ marginTop: 8 }}>
+            <div style={{ marginTop: 10 }}>
               <input
                 value={newMsg}
                 onChange={(e) => setNewMsg(e.target.value)}
@@ -101,7 +90,7 @@ const Mesero = () => {
                   width: "70%",
                   padding: 8,
                   borderRadius: 4,
-                  border: "1px solid #ccc",
+                  border: "1px solid #ddd",
                 }}
               />
               <button
@@ -109,7 +98,7 @@ const Mesero = () => {
                 style={{
                   marginLeft: 8,
                   padding: "8px 16px",
-                  backgroundColor: "#28a745",
+                  backgroundColor: "#007bff",
                   color: "white",
                   border: "none",
                   borderRadius: 4,
