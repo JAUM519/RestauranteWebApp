@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { escucharPedidos } from "../../hooks/usePedidos";
-import { listenMessages, sendMessage } from "../../hooks/useMessages"; // ✅ nuevo import
+import { listenMessages, sendMessage } from "../../hooks/useMessages";
 
 const Mesero = () => {
   const [pedidos, setPedidos] = useState({});
@@ -31,21 +31,32 @@ const Mesero = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Pedidos en tiempo real</h1>
+    <div style={{ padding: 20 }}>
+      <h1>Mesero — Pedidos</h1>
 
       {Object.keys(pedidos).length === 0 ? (
         <p>No hay pedidos activos aún</p>
       ) : (
-        <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ display: "flex", gap: 20 }}>
           {/* Lista de pedidos */}
           <div style={{ flex: 1 }}>
             <h3>Lista de pedidos</h3>
             <ul>
-              {Object.entries(pedidos).map(([id, pedido]) => (
-                <li key={id} style={{ marginBottom: "10px" }}>
-                  <button onClick={() => setActiveOrder(id)}>
-                    #{id.slice(0, 6)} — ${pedido.total} — {pedido.estado}
+              {Object.entries(pedidos).map(([id, p]) => (
+                <li key={id} style={{ marginBottom: 8 }}>
+                  <button
+                    onClick={() => setActiveOrder(id)}
+                    style={{
+                      backgroundColor:
+                        id === activeOrder ? "#007bff" : "#f0f0f0",
+                      color: id === activeOrder ? "white" : "black",
+                      border: "none",
+                      padding: "6px 12px",
+                      borderRadius: 4,
+                      cursor: "pointer",
+                    }}
+                  >
+                    #{id.slice(0, 6)} — ${p.total} — {p.estado}
                   </button>
                 </li>
               ))}
@@ -61,8 +72,8 @@ const Mesero = () => {
             <div
               style={{
                 minHeight: 200,
-                border: "1px solid #ccc",
-                padding: 10,
+                border: "1px solid #ddd",
+                padding: 8,
                 overflowY: "auto",
                 backgroundColor: "#fafafa",
               }}
@@ -81,7 +92,7 @@ const Mesero = () => {
               )}
             </div>
 
-            <div style={{ marginTop: 10 }}>
+            <div style={{ marginTop: 8 }}>
               <input
                 value={newMsg}
                 onChange={(e) => setNewMsg(e.target.value)}
@@ -90,7 +101,7 @@ const Mesero = () => {
                   width: "70%",
                   padding: 8,
                   borderRadius: 4,
-                  border: "1px solid #ddd",
+                  border: "1px solid #ccc",
                 }}
               />
               <button
@@ -98,7 +109,7 @@ const Mesero = () => {
                 style={{
                   marginLeft: 8,
                   padding: "8px 16px",
-                  backgroundColor: "#007bff",
+                  backgroundColor: "#28a745",
                   color: "white",
                   border: "none",
                   borderRadius: 4,
