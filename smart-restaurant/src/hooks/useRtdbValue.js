@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react'
-import { watchValue } from '../realtime/rtdb'
+import { useEffect, useState } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "../firebase/config";
 
-export default function useRtdbValue(path, { initial = null } = {}) {
-    const [value, setValue] = useState(initial)
-    useEffect(() => {
-        if (!path) return
-        const off = watchValue(path, setValue)
-        return off
-    }, [path])
-    return value
-}
+export const useRtdbValue = (path) => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const dbRef = ref(db, path);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      setData(snapshot.val());
+    });
+
+    return () => unsubscribe();
+  }, [path]);
+
+  return data;
+};
