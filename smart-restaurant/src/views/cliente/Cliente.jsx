@@ -6,6 +6,7 @@ import { crearPago } from "../../hooks/usePayments";
 import { listenMessages, sendMessage } from "../../hooks/useMessages";
 import { suscribirCambiosPedido } from "../../hooks/usePedidos"; 
 
+
 const menuInicial = [
   { id: 1, nombre: "Hamburguesa", precio: 18000 },
   { id: 2, nombre: "Pizza", precio: 25000 },
