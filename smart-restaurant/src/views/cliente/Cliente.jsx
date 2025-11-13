@@ -1,8 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PedidoContext } from "../../context/PedidoContext";
 import { crearPedido } from "../../hooks/usePedidos";
 import { crearPago } from "../../hooks/usePayments";
 import { listenMessages, sendMessage } from "../../hooks/useMessages";
+import { suscribirCambiosPedido } from "../../hooks/usePedidos"; 
+
 const menuInicial = [
   { id: 1, nombre: "Hamburguesa", precio: 18000 },
   { id: 2, nombre: "Pizza", precio: 25000 },
@@ -10,6 +13,7 @@ const menuInicial = [
 ];
 
 const Cliente = () => {
+  const navigate = useNavigate();
   const [menu] = useState(menuInicial);
   const [carrito, setCarrito] = useState([]);
   const [metodoPago, setMetodoPago] = useState("Efectivo");
@@ -55,32 +59,32 @@ const Cliente = () => {
         alert(" Pago con tarjeta registrado (simulado)");
       }
 
-      setCarrito([]); // Limpia el carrito después del envío
+      setCarrito([]);
     } catch (error) {
-      console.error(" Error al crear pedido:", error);
+      console.error("❌ Error al crear pedido:", error);
       alert("Hubo un problema al enviar tu pedido.");
     }
   };
 
-  //  Escuchar mensajes del pedido activo
+  // Escuchar mensajes del pedido activo
   useEffect(() => {
     if (!lastOrderId) return;
     const stop = listenMessages(lastOrderId, setMsgList);
     return () => stop && stop();
   }, [lastOrderId]);
 
-  // Escuchar cambios en el estado del pedido
-useEffect(() => {
-  if (!lastOrderId) return;
-  const stop = suscribirCambiosPedido(lastOrderId, (pedido) => {
-    if (pedido?.estado) {
-      alert(` Estado actualizado: ${pedido.estado}`);
-    }
-  });
-  return () => stop && stop();
-    }, [lastOrderId]);
+  // Escuchar cambios de estado en el pedido
+  useEffect(() => {
+    if (!lastOrderId) return;
+    const stop = suscribirCambiosPedido(lastOrderId, (pedido) => {
+      if (pedido?.estado) {
+        alert(` Estado actualizado: ${pedido.estado}`);
+      }
+    });
+    return () => stop && stop();
+  }, [lastOrderId]);
 
-  //  Enviar mensaje del cliente
+  // Enviar mensaje del cliente
   const sendClientMsg = async () => {
     if (!lastOrderId || !text.trim()) return;
     await sendMessage(lastOrderId, "cliente", text.trim());
@@ -89,6 +93,22 @@ useEffect(() => {
 
   return (
     <div style={{ padding: "20px" }}>
+      {/* 🔹 Botón para ver historial de pedidos */}
+      <button
+        onClick={() => navigate("/historial")}
+        style={{
+          marginBottom: "15px",
+          padding: "8px 16px",
+          backgroundColor: "#ff9800",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Ver historial de pedidos
+      </button>
+
       <h2>Menú del Restaurante</h2>
       <ul>
         {menu.map((item) => (
@@ -99,7 +119,7 @@ useEffect(() => {
         ))}
       </ul>
 
-      <h3>🛒 Carrito</h3>
+      <h3> Carrito</h3>
       <ul>
         {carrito.map((item) => (
           <li key={item.id}>
@@ -111,7 +131,6 @@ useEffect(() => {
 
       <h4>Total: ${total}</h4>
 
-      {/* Selección de método de pago */}
       <label>
         Método de pago:
         <select
