@@ -19,6 +19,8 @@ export const suscribirCambiosPedido = (orderId, callback) => {
     }
   });
 
+
+  
   console.log(` Escuchando cambios en el pedido ${orderId}`);
   return () => unsubscribe();
 };
