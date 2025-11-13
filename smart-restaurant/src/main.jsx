@@ -10,7 +10,7 @@ import AppRouter from "./router/AppRouter.jsx";
 import { AppProvider } from "./context/AppContext.jsx";
 import { LiveProvider } from "./context/LiveContext.jsx";
 import { HistoryProvider } from "./context/HistoryContext.jsx";
-import { PedidoProvider } from "./context/PedidoContext.jsx"; // ✅ nuevo contexto
+import { PedidoProvider } from "./context/PedidoContext.jsx";
 
 import "./index.scss";
 
