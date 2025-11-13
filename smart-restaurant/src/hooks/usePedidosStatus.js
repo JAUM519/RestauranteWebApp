@@ -1,23 +1,24 @@
-import { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { rtdb } from "../firebase/config";
 
 /**
- * Hook personalizado que escucha en tiempo real los pedidos
- * y retorna su lista en formato objeto { id: { ...pedido } }.
+ * Suscribe en tiempo real a los cambios de estado de un pedido específico.
+ * @param {string} orderId - ID del pedido
+ * @param {function} callback - Función que recibe los datos del pedido actualizados
+ * @returns {function} - Función para detener la suscripción
  */
-export const usePedidosStatus = () => {
-  const [pedidos, setPedidos] = useState({});
+export const suscribirCambiosPedido = (orderId, callback) => {
+  if (!orderId) return;
 
-  useEffect(() => {
-    const pedidosRef = ref(rtdb, "pedidos");
-    const unsubscribe = onValue(pedidosRef, (snapshot) => {
-      const data = snapshot.val() || {};
-      setPedidos(data);
-    });
+  const pedidoRef = ref(rtdb, `pedidos/${orderId}`);
+  const unsubscribe = onValue(pedidoRef, (snapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.val());
+    } else {
+      callback(null);
+    }
+  });
 
-    return () => unsubscribe();
-  }, []);
-
-  return pedidos;
+  console.log(` Escuchando cambios en el pedido ${orderId}`);
+  return () => unsubscribe();
 };
