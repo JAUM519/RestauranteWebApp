@@ -4,7 +4,6 @@ import { fileURLToPath, URL } from 'node:url'
 
 // Config estable para desarrollo local
 export default defineConfig({
-  plugins: [react()],
   server: {
     port: 5174,
     strictPort: true,
@@ -20,6 +19,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  build: {
+    minify: false, // Deshabilita la minificación
+    cssCodeSplit: false, // Deshabilita la división de código CSS
+    terserOptions: {
+        compress: false, // Deshabilita la compresión de Terser
+        mangle: false, // Deshabilita la optimización de nombres de variables
     },
   },
 })

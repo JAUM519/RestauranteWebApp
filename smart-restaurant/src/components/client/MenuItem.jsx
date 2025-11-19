@@ -1,3 +1,4 @@
+import React from "react";
 import Button from '../Button.jsx'
 import styles from './Menu.module.scss'
 import { useDispatch } from 'react-redux'

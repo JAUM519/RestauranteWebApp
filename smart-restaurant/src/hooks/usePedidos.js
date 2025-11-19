@@ -15,6 +15,14 @@ export const actualizarPedido = async (id, patch) => {
   await set(pedidoRef, { ...data, ...patch });
 };
 
+export const escucharPedidos = (callback) => {
+    const pedidosRef = ref(rtdb, "pedidos");
+    const unsubscribe = onValue(pedidosRef, (snapshot) => {
+        const data = snapshot.exists() ? snapshot.val() : {};
+        callback(data);
+    });
+    return () => unsubscribe();
+};
 //  escucha el estado de un pedido específico
 export const suscribirCambiosPedido = (pedidoId, callback) => {
   const pedidoRef = ref(rtdb, `pedidos/${pedidoId}`);

@@ -1,3 +1,4 @@
+import React from "react";
 import useMenuTree from '../../hooks/useMenuTree.js'
 import MenuCategory from '../../components/client/MenuCategory.jsx'
 import styles from '../../components/client/Menu.module.scss'

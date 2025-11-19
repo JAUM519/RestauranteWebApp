@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function QtyInput({ value, onChange, min = 0, ...rest }) {
   return (
     <input

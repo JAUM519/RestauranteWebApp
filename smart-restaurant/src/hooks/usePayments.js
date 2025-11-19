@@ -7,14 +7,14 @@ import { rtdb } from "../firebase/config";
  * @param {object} pago - Datos del pago (método, monto, ts).
  */
 export const crearPago = async (orderId, pago) => {
-  if (!orderId || !pago) return;
+    if (!orderId || !pago) return;
 
-  const pagosRef = ref(rtdb, `pagos/${orderId}`);
-  const nuevoPagoRef = push(pagosRef);
-  await nuevoPagoRef.set(pago);
+    const pagosRef = ref(rtdb, `pagos/${orderId}`);
+    const nuevoPagoRef = push(pagosRef);
+    await set(nuevoPagoRef, pago);
 
-  console.log(` Pago registrado para el pedido ${orderId}`, pago);
-  return nuevoPagoRef.key;
+    console.log(` Pago registrado para el pedido ${orderId}`, pago);
+    return nuevoPagoRef.key;
 };
 
 /**

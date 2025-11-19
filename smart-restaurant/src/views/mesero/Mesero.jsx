@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { escucharPedidos } from "../../hooks/usePedidos";
-import { listenMessages, sendMessage } from "../../hooks/useMessages";
+import { escucharPedidos, suscribirCambiosPedido } from "@/hooks/usePedidos.js";
+import { listenMessages, sendMessage } from "@/hooks/useMessages.js";
 
 const Mesero = () => {
   const [pedidos, setPedidos] = useState({});

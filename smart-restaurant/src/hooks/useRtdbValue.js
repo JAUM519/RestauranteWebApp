@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
-import { db } from "../firebase/config";
+import { rtdb } from "../firebase/config";
 
-export const useRtdbValue = (path) => {
-  const [data, setData] = useState(null);
+export function useRtdbValue(path, { initial = null } = {}) {
+    const [data, setData] = useState(initial);
 
-  useEffect(() => {
-    const dbRef = ref(db, path);
-    const unsubscribe = onValue(dbRef, (snapshot) => {
-      setData(snapshot.val());
-    });
+    useEffect(() => {
+        if (!path) return;
 
-    return () => unsubscribe();
-  }, [path]);
+        const dbRef = ref(rtdb, path);
+        const unsubscribe = onValue(dbRef, (snapshot) => {
+            setData(snapshot.val());
+        });
 
-  return data;
-};
+        return () => unsubscribe();
+    }, [path]);
+
+    return data;
+}

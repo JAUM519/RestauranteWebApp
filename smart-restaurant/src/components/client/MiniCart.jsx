@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { selectItems, selectTotal, selectPayment, setPaymentMethod, updateQty, removeItem, setComment, selectComment, setOrderId, clearCart, updateCustomization } from '../../features/cart/cartSlice.js'
 import Button from '../Button.jsx'
