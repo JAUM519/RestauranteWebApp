@@ -1,3 +1,4 @@
+import React from "react";
 import styles from './WaiterSidebar.module.scss'
 import ActiveNavLink from '../../components/ActiveNavLink.jsx'
 import iBoard from '../../assets/Iconos_Waiter/Tablero_mesas.png'

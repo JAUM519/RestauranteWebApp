@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import React from "react";
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { loginSucceeded } from '../features/auth/authSlice.js'
-import { signUpWithGoogleAndCreateUser } from '../features/auth/authThunks.js'
+import { signUpWithGoogleAndCreateUser } from '../features/auth/authService.js'
 
 export default function SignupGoogle() {
     const [role, setRole] = useState('client')
@@ -46,10 +46,28 @@ export default function SignupGoogle() {
             <div style={{ marginTop: 16 }}>
                 <label style={{ display: 'block', marginBottom: 6 }}>Rol:</label>
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
+                    <option value="client">client</option>
                     <option value="waiter">waiter</option>
                     <option value="cook">cook</option>
                 </select>
             </div>
+
+            {role === 'client' && (
+                <div style={{ marginTop: 12 }}>
+                    <label style={{ display: 'block', marginBottom: 6 }}>Número de mesa (opcional):</label>
+                    <input
+                        type="number"
+                        min="1"
+                        placeholder="Ej. 12"
+                        value={table}
+                        onChange={(e) => setTable(e.target.value)}
+                        style={{ padding: 8, width: 160 }}
+                    />
+                    <small style={{ display: 'block', marginTop: 6 }}>
+                        Si lo dejas vacío, se asignará automáticamente.
+                    </small>
+                </div>
+            )}
 
             <div style={{ display: 'grid', gap: 8, marginTop: 16 }}>
                 <button onClick={onSubmit} disabled={busy}>
