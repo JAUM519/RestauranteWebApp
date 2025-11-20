@@ -23,6 +23,16 @@ export default async function handler(event, context) {
 
         let deletedAuthUsers = 0
 
+        let deletedDocs = 0
+        if (snap.size > 0) {
+            const batch = db.batch()
+            snap.docs.forEach((doc) => {
+                batch.delete(doc.ref)
+            })
+            await batch.commit()
+            deletedDocs = snap.size
+        }
+
         if (uids.length > 0) {
             const CHUNK = 1000
             for (let i = 0; i < uids.length; i += CHUNK) {
