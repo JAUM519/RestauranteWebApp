@@ -13,6 +13,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
     "firebase": "^12.5.0",
+    "firebase-admin": "^13.6.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-redux": "^9.2.0",
