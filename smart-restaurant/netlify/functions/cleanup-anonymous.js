@@ -1,72 +1,55 @@
-import { Timestamp } from 'firebase-admin/firestore'
+// netlify/functions/cleanup-anonymous.js
 import { getAdminAuth, getAdminDb } from './_shared/firebaseAdmin.js'
 
 export default async function handler(event, context) {
     try {
-        const db = getAdminDb()
         const auth = getAdminAuth()
+        const db = getAdminDb()
 
-        const dryRun = process.env.CLEANUP_DRY_RUN === '1'
+        const dryRun = event.queryStringParameters?.dry === "1"
 
-        const now = Date.now()
-        const cutoffMillis = now - 24 * 60 * 60 * 1000
-        const cutoffTs = Timestamp.fromMillis(cutoffMillis)
+        // Obtener todos los usuarios de Firebase Auth
+        const list = await auth.listUsers(1000)
 
-        const snap = await db
-            .collection('users')
-            .where('provider', '==', 'anonymous')
-            .where('createdAt', '<=', cutoffTs)
-            .get()
+        const anonymous = list.users.filter(u => u.providerData.length === 0)
 
-        const uids = snap.docs.map((d) => d.id)
-        console.log(
-            `[cleanup-anonymous] Encontrados ${uids.length} usuarios anónimos candidatos (dryRun=${dryRun})`
-        )
+        console.log(`Encontrados ${anonymous.length} usuarios anónimos`)
 
-        let deletedAuthUsers = 0
+        let deletedAuth = 0
         let deletedDocs = 0
 
-        if (!dryRun && uids.length > 0) {
-            const CHUNK = 1000
-            for (let i = 0; i < uids.length; i += CHUNK) {
-                const chunk = uids.slice(i, i + CHUNK)
-                const result = await auth.deleteUsers(chunk)
-                deletedAuthUsers += result.successCount
+        if (!dryRun) {
+            for (const user of anonymous) {
+                await auth.deleteUser(user.uid)
+                deletedAuth++
 
-                if (result.failureCount) {
-                    console.warn(
-                        `[cleanup-anonymous] Fallos al borrar usuarios de Auth:`,
-                        result.errors
-                    )
-                }
-            }
-
-            if (snap.size > 0) {
-                const batch = db.batch()
-                snap.docs.forEach((doc) => batch.delete(doc.ref))
-                await batch.commit()
-                deletedDocs = snap.size
+                // Intentar borrar también en Firestore
+                try {
+                    await db.collection("users").doc(user.uid).delete()
+                    deletedDocs++
+                } catch {}
             }
         }
 
         return {
             statusCode: 200,
             body: JSON.stringify({
-                candidates: uids.length,
-                deletedAuthUsers,
+                ok: true,
+                anonymousFound: anonymous.length,
+                deletedAuth,
                 deletedDocs,
-                dryRun,
-            }),
+                dryRun
+            })
         }
-    } catch (err) {
-        console.error('[cleanup-anonymous] Error en cleanup-anonymous:', err)
+    } catch (error) {
+        console.error("Error:", error)
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: err.message }),
+            body: JSON.stringify({ error: error.message })
         }
     }
 }
 
 export const config = {
-    schedule: '0 5 * * *',
+    schedule: "0 5 * * *"  // 12a.m en Colombia
 }
