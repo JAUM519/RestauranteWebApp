@@ -1,0 +1,15 @@
+Colores Principales:
+
+#00B9F2 y #FFC823
+
+Botones:
+
+#0083B3 Azul para indicar pendiente
+#B88400 Amarillo
+#34B857 Verde
+
+
+Font:
+
+Elms Sans
+

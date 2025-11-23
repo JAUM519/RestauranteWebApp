@@ -1,0 +1,46 @@
+@use '../styles/variables' as *;
+
+.shell {
+  display: grid;
+  grid-template-rows: 56px 1fr;
+  height: 100dvh;
+}
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  background: $accent;
+  color: #0b0c10;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.skipLink:focus {
+  left: 8px;
+  top: 8px;
+  z-index: 100;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  min-height: 0;
+}
+
+.main {
+  min-width: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .body {
+    grid-template-columns: 0 1fr;
+  }
+  .main {
+    padding: 12px;
+  }
+}

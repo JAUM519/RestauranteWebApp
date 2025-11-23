@@ -1,0 +1,10 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.btn {
+  @include button;
+  background: $accent;
+  color: #0b0c10;
+  transition: transform .06s ease;
+  &:active { transform: translateY(1px); }
+}
